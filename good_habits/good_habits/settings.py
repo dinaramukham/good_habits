@@ -82,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'good_habits',
         'USER': 'postgres',
-        'PASSWORD': 12345,#os.getenv('PASSWORD'),
+        'PASSWORD': os.getenv('PASSWORD'),
         'HOST': 'localhost',
     }
 }
