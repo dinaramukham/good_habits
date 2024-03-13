@@ -28,10 +28,24 @@ class HabitUpdateAPIView(generics.UpdateAPIView):
 
 
 class HabitListAPIView(generics.ListAPIView):
-    permission_classes = [IsAuthenticated, IsPublicHabit]
+    permission_classes = [IsAuthenticated]
     serializer_class = HabitSerializer
     queryset = Habit.objects.all()
     pagination_class = Paginatiom
+
+
+class HabitPublicListAPIView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated, IsOwnerPermissionsClass]
+    serializer_class = HabitSerializer
+    queryset = Habit.objects.all()
+    pagination_class = Paginatiom
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases
+        for the currently authenticated user.
+        """
+        return Habit.objects.filter(it_public=True)
 
 
 class HabitDestroyAPIView(generics.DestroyAPIView):

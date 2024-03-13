@@ -4,7 +4,8 @@ from rest_framework.response import Response
 from .serializers import UserSerializer
 from .models import User
 
-
+class MyTokenObtainPairView(TokenObtainPairSerializer):
+    serializer_class = MyTokenObtainPairSerializer
 # Create your views here.
 class UserViewSet(viewsets.ViewSet):
     def list(self, request):
