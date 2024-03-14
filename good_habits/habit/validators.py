@@ -1,7 +1,5 @@
 from rest_framework.serializers import ValidationError
 
-from good_habits.habit.models import Habit
-
 
 class ValidatorFeeOrHabit:
     def __init__(self, fee_some, fee_habit):
@@ -9,7 +7,7 @@ class ValidatorFeeOrHabit:
         self.field = fee_habit
 
     def __call__(self, fee_some, fee_habit):
-        if fee_some != None and fee_habit.__class__ == Habit:
+        if fee_some != None and fee_habit.__class__ != None:
             raise ValidationError('вознаграждение либо привычка, либо предмет')
 
 

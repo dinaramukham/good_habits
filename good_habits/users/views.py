@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.response import Response
-from .serializers import UserSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+from .serializers import UserSerializer, MyTokenObtainPairSerializer
 from .models import User
 
 class MyTokenObtainPairView(TokenObtainPairSerializer):

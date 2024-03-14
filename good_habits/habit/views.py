@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import Habit
 from .paginators import Paginatiom
-from .permission import IsOwnerPermissionsClass, IsPublicHabit
+from .permission import IsOwnerPermissionsClass
 from .serializers import HabitSerializer
 
 
