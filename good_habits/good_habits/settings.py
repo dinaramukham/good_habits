@@ -13,6 +13,8 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+from celery.schedules import crontab
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -41,6 +43,8 @@ INSTALLED_APPS = [
     'habit',
     'rest_framework',
     'django_celery_beat',
+    'drf_yasg',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -81,7 +85,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'good_habits',
         'USER': 'postgres',
-        'PASSWORD': 12345,#os.getenv('PASSWORD'),
+        'PASSWORD': 12345,  # os.getenv('PASSWORD'),
         'HOST': 'localhost',
     }
 }
@@ -129,7 +133,7 @@ AUTH_USER_MODEL = 'users.User'
 
 # celery
 # URL-адрес брокера сообщений
-CELERY_BROKER_URL = 'redis://localhost:6379' # Например, Redis, который по умолчанию работает на порту 6379
+CELERY_BROKER_URL = 'redis://localhost:6379'  # Например, Redis, который по умолчанию работает на порту 6379
 
 # URL-адрес брокера результатов, также Redis
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
@@ -145,8 +149,15 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 
 # Настройки для Celery
 CELERY_BEAT_SCHEDULE = {
-    'task-name': {
-        'task': 'myapp.tasks.my_task',  # Путь к задаче
-        'schedule': timedelta(days=1),  # Расписание выполнения задачи 
+    'task-day': {
+        'task': 'habit.tasks.every_day_task',  # Путь к задаче
+        'schedule': crontab(hour=9, minute=0),  # Расписание выполнения задачи
+    },
+    'task-week': {
+        'task': 'habit.tasks.every_week_task',  # Путь к задаче
+        'schedule': crontab(hour=9, minute=0, day_of_week=1),  # Расписание выполнения задачи
     },
 }
+
+# telegram
+TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
