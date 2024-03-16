@@ -14,9 +14,12 @@ from datetime import timedelta
 from pathlib import Path
 
 from celery.schedules import crontab
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+dot_env = os.path.join(BASE_DIR, '.env')
+load_dotenv(dotenv_path=dot_env)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -41,10 +44,12 @@ INSTALLED_APPS = [
 
     'users',
     'habit',
+
     'rest_framework',
+    'rest_framework_simplejwt',
     'django_celery_beat',
     'drf_yasg',
-    'corsheaders'
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -55,6 +60,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'good_habits.urls'
@@ -85,8 +92,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'good_habits',
         'USER': 'postgres',
-        'PASSWORD': 12345,  # os.getenv('PASSWORD'),
-        'HOST': 'localhost',
+        'PASSWORD': os.getenv('PASSWORD'),
+        'HOST': os.getenv('HOST'),
     }
 }
 
@@ -131,15 +138,36 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
 
+# simple_jwt
+SIMPLE_JWT = {'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+              'REFRESH_TOKEN_LIFETIME': timedelta(days=3), }
+
+# swagger
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+        }
+    }
+}
+
+# rest-framework
+REST_FRAMEWORK = {'DEFAULT_AUTHENTICATION_CLASSES': (
+    'rest_framework_simplejwt.authentication.JWTAuthentication',
+)
+}
+
 # celery
 # URL-адрес брокера сообщений
-CELERY_BROKER_URL = 'redis://localhost:6379'  # Например, Redis, который по умолчанию работает на порту 6379
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')  # Например, Redis, который по умолчанию работает на порту 6379
 
 # URL-адрес брокера результатов, также Redis
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
 
 # Часовой пояс для работы Celery
-CELERY_TIMEZONE = "Australia/Tasmania"
+CELERY_TIMEZONE = "Russia/Ekaterinburg"
 
 # Флаг отслеживания выполнения задач
 CELERY_TASK_TRACK_STARTED = True
@@ -147,7 +175,7 @@ CELERY_TASK_TRACK_STARTED = True
 # Максимальное время на выполнение задачи
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
-# Настройки для Celery
+# Настройки для сelery-beat
 CELERY_BEAT_SCHEDULE = {
     'task-day': {
         'task': 'habit.tasks.every_day_task',  # Путь к задаче
@@ -161,3 +189,15 @@ CELERY_BEAT_SCHEDULE = {
 
 # telegram
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
+
+# CORS
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8000',  # Замените на адрес вашего фронтенд-сервера
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://read-and-write.example.com",  # Замените на адрес вашего фронтенд-сервера
+    # и добавьте адрес бэкенд-сервера
+]
+
+CORS_ALLOW_ALL_ORIGINS = False
