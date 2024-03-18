@@ -1,8 +1,6 @@
 from django.urls import path
 
-
 from . import views
-
 
 urlpatterns = [
     path('create/', views.HabitCreateAPIView.as_view(), name='habit_create'),

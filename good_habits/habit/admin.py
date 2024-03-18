@@ -10,11 +10,8 @@ class HabitAdmin(admin.ModelAdmin):
                     'action', 'fee_some', 'it_easy_habit',
                     'fee_habit', 'it_public', 'period', 'time_action',)
     list_filter = ('user', 'place', 'time',
-                    'action', 'fee_some', 'it_easy_habit',
-                    'fee_habit', 'it_public', 'period', 'time_action',)
+                   'action', 'fee_some', 'it_easy_habit',
+                   'fee_habit', 'it_public', 'period', 'time_action',)
     search_fields = ('user', 'place', 'time',
-                    'action', 'fee_some', 'it_easy_habit',
-                    'fee_habit', 'it_public', 'period', 'time_action',)
-
-
-
+                     'action', 'fee_some', 'it_easy_habit',
+                     'fee_habit', 'it_public', 'period', 'time_action',)
