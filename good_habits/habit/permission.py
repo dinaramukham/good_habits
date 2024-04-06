@@ -10,6 +10,6 @@ class IsOwnerPermissionsClass(BasePermission):
 
 class IsPublicHabit(BasePermission):
     def has_object_permission(self, request, view, obj):
-        if obj.it_public == True:
+        if request.method in ['GET']:
             return True
         return False

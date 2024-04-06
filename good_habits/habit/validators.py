@@ -25,5 +25,5 @@ class ValidatorEasyHabit:
 
 
 def is_easy_habit(value):
-    if value.it_easy_habit == False:
+    if not value.it_easy_habit:
         raise ValidationError('только приятные привычки')

@@ -25,7 +25,7 @@ load_dotenv(dotenv_path=dot_env)
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-p-0x%g0#+xqr^_=xg)&qj3l(j^n#*2k$5f$jq@tf$&u^32r5p5'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'drf_yasg',
     'corsheaders',
+    'python_telegram_bot',
 ]
 
 MIDDLEWARE = [
@@ -89,9 +90,9 @@ WSGI_APPLICATION = 'good_habits.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'good_habits',
-        'USER': 'postgres',
+        'ENGINE': os.getenv('ENGINE'),
+        'NAME': os.getenv('NAME'),
+        'USER': os.getenv('USER'),
         'PASSWORD': os.getenv('PASSWORD'),
         'HOST': os.getenv('HOST'),
     }
@@ -192,7 +193,7 @@ TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
 
 # CORS
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8000',  # Замените на адрес вашего фронтенд-сервера
+    os.getenv('CORS_ALLOWED_ORIGINS'),  # Замените на адрес вашего фронтенд-сервера
 ]
 
 CSRF_TRUSTED_ORIGINS = [
