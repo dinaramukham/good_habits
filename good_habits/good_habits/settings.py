@@ -91,9 +91,9 @@ WSGI_APPLICATION = 'good_habits.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': os.getenv('ENGINE'),
-        'NAME': os.getenv('NAME'),
-        'USER': os.getenv('USER'),
-        'PASSWORD': os.getenv('PASSWORD'),
+        'NAME': os.getenv('POSTGRES_DB'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
         'HOST': os.getenv('HOST'),
     }
 }
@@ -172,6 +172,10 @@ CELERY_TIMEZONE = "Russia/Ekaterinburg"
 
 # Флаг отслеживания выполнения задач
 CELERY_TASK_TRACK_STARTED = True
+
+CELERY_ACCEPT_CONTENT = ['json']
+ELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
 
 # Максимальное время на выполнение задачи
 CELERY_TASK_TIME_LIMIT = 30 * 60
