@@ -5,23 +5,26 @@ services:
     ports:
       - '6379:6379'
   celery:
-    build:  ./path_to_celery_Dockerfile
+    build:  .
     tty:  true
     command:  celery -A good_habits worker -l INFO
     depends_on:
       - redis
       - app
   celery_beat:
-    build:  ./path_to_celery_Dockerfile
+    build:  .
     tty: true
     command: celery -A good_habits beat -l INFO
     depends_on:
       - redis
       - db
+      - app
   app:
     tty:  true
-    build: ..
-    command: python3 manage.py migrate && python manage.py runserver 0.0.0.0:8000
+    build: .
+    command: bash -c "python3 manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
     volumes:
       - .:/app
     depends_on:
@@ -32,9 +35,9 @@ services:
     env_file:
       - .env
     volumes:
-      - pg_data:/var/lib/postgresql/data/good_habit_data
+      - ./pg_data:/var/lib/postgresql/data
     healthcheck:
-      test:  ["CMD-SHELL", "pg_isready"]
+      test:  ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
       interval:  10s
       timeout:  5s
 volumes:
