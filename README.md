@@ -14,5 +14,4 @@ cd your_project
 2. Запустите контейнеры с помощью Docker Compose:
  docker-compose up --build
 
-3. Примените миграции Django:
-docker-compose exec web python manage.py migrate
+3. ваше приложение будет доступно по адресу http://localhost:8000/ или http://127.0.0.1:8000/
